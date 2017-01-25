@@ -1,2 +1,3 @@
 # formatrix
-http://formatrix.org/
+
+pre-release / still under development
