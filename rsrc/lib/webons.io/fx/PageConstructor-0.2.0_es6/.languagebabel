@@ -1,0 +1,15 @@
+{
+
+	"projectRoot":				true,
+	"babelMapsPath":				"",
+	"babelMapsAddUrl":			false,
+	"babelSourcePath":			"",
+	"babelTranspilePath":			"../PageConstructor-0.2.0_es5/",
+	"createMap":				false,
+	"createTargetDirectories":		false,
+	"createTranspiledCode":			true,
+	"disableWhenNoBabelrcFileInPath":	true,
+	"suppressSourcePathMessages":		false,
+	"suppressTranspileOnSaveMessages":	false,
+	"transpileOnSave":			true
+}

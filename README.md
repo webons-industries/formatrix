@@ -1,3 +1,3 @@
 # formatrix
 
-pre-release / still under development
+pre-releases / still under development

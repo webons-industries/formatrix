@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+		<title>example: screen</title>
+		<link href="../../rsrc/lib/webons.io/fx/PageConstructor-0.2.0/styles/format.min.css" rel="stylesheet" media="all" />
+		<link href="rsrc/app/styles/layout.css" rel="stylesheet" media="all" />
+		<script src="../../rsrc/lib/webons.io/fx/PageConstructor-0.2.0/preload/screen.js" onLoad="fx.screen.init({dynBaseSize:{minPos:500,maxPos:4000,bodyFunction: (function(position,range){return ((((1.05*position)-80)*((1.05*position)-80))/50)+90;})}});"></script>
+		<script data-init="./rsrc/app/scripts~?/" src="../../rsrc/lib/webons.io/fx/0.4.2/index.js" async="true"></script>
+	</head>
+	<body>
+		<main>
+			<div class="fx_box fx_w100 fx_box-gutter-start">
+				<div class="fx_box fx_w100">
+					<h1>Headline H1</h1>
+					<h2>Headline H2</h2>
+					<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+					<p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+				</div>
+				<div class="fx_box fx_w100">
+					<h2>grid</h2>
+				</div>
+				<div class="fx_box fx_w100">
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>1</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>2</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>3</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>4</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>5</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w33 fx_xLarge-w20"><p>6</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w50 fx_xLarge-w20"><p>7</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w50 fx_xLarge-w20"><p>8</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w50 fx_xLarge-w20"><p>9</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w50 fx_xLarge-w20"><p>10</p></div>
+				</div>
+				<div class="fx_box fx_w100">
+					<h2>grid:flex line (constant gutter)</h2>
+				</div>
+				<div class="fx_box fx_w100 fx_box-flex">
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w50 fx_xLarge-w10"><p>1 1 1 1 1 1 1 1<br>1<br>1</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w50 fx_xLarge-w10"><p>2 2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w33 fx_xLarge-w10"><p>3 3 3 3 3 </p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w33 fx_xLarge-w10"><p>4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 <br>4<br>4<br>4<br>4<br></p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w33 fx_xLarge-w10 fx_box-flex">
+						<div class="fx_box fx_w50">
+							<p>a</p>
+						</div>
+						<div class="fx_box fx_w50">
+							<p>b</p>
+						</div>
+					</div>
+					<div class="fx_box fx_w100 fx_xSmall-w33 fx_xMedium-w20 fx_xLarge-w10"><p>6</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w20 fx_xLarge-w10"><p>7</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w20 fx_xLarge-w10"><p>8<br>8<br>8<br></p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w20 fx_xLarge-w10"><p>9</p></div>
+					<div class="fx_box fx_w100 fx_xSmall-w50 fx_xMedium-w20 fx_xLarge-w10"><p>10<br>10<br>10<br>10<br>10<br>10<br>10 10 10 10 10 10</p></div>
+				</div>
+				<div class="fx_box fx_w100">
+					<h2>grid:flex nested (constant gutter) [dev]</h2>
+				</div>
+				<div class="fx_box fx_w100 fx_box-flex-nested">
+					<div class="fx_box fx_w100 fx_xMedium-w50">
+						<div class="fx_box fx_w100 fx_xSmall-w50 fx_xLarge-w33">
+							<p>feft 1</p>
+						</div>
+						<div class="fx_box fx_w100 fx_xSmall-w50 fx_xLarge-w33">
+							<p>feft 2<br>.<br>..</p>
+						</div>
+						<div class="fx_box fx_w100 fx_xLarge-w33">
+							<p>feft 3</p>
+						</div>
+					</div>
+					<div class="fx_box fx_w100 fx_xMedium-w50">
+						<div class="fx_box fx_w100 fx_xMedium-w50">
+							<div class="fx_box fx_w100 fx_xSmall-w33">
+								<p>right 1a<br>.<br>..<br>...<br>....</p>
+							</div>
+							<div class="fx_box fx_w100 fx_xSmall-w33">
+								<p>right 1b</p>
+							</div>
+							<div class="fx_box fx_w100 fx_xSmall-w33">
+								<p>right 1c</p>
+							</div>
+						</div>
+						<div class="fx_box fx_w100 fx_xMedium-w50">
+							<p>right 2</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
