@@ -1,10 +1,10 @@
 (()=>{
 
-  let $=new Namespace("[app]scripts~?/extra");
+  let $=new Namespace("app://scripts~?/extra");
 
 	//************************************************************************> join
 	$.use({
-		app:	"[app]scripts~?/",
+		app:	"app://scripts~?/",
 	});
 
 	//************************************************************************> autorun

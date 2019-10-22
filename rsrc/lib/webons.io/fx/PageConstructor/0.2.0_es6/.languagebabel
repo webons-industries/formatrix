@@ -4,7 +4,7 @@
 	"babelMapsPath":				"",
 	"babelMapsAddUrl":			false,
 	"babelSourcePath":			"",
-	"babelTranspilePath":			"../PageConstructor-0.2.0_es5/",
+	"babelTranspilePath":			"../0.2.0_es5/",
 	"createMap":				false,
 	"createTargetDirectories":		false,
 	"createTranspiledCode":			true,

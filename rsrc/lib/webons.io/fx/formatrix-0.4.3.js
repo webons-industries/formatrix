@@ -1,8 +1,8 @@
 /*!
-*  formatrix 0.4.2 (http://formatrix.org)
+*  formatrix 0.4.3 (http://formatrix.org)
 *
 *
-*  Copyright (c) webons.industries
+*  Copyright (c) 2016-2019 Germo Moeller / webons.industries
 *
 *  This source code is licensed under the MIT license found in the
 *  LICENSE file in the root directory of this source tree.
@@ -16,7 +16,7 @@
 		prv:{
 			$:{
 				// version
-				ver:'0.4.2',
+				ver:'0.4.3',
 				// instance
 				instance:null,
 				// default boot settings > rewritable by 'init' namespace
@@ -426,8 +426,9 @@
 
 		// set namespace modifier-list
 		setModifiers:function(){
+			delete $.prv.$.config.locator['sys'];
 			Object.keys($.prv.$.config.locator).map(function(key){
-				$.prv.$.ns_scm.push(['['+key+']', $.prv.$.config.locator[key]]);
+				$.prv.$.ns_scm.push([''+key+'://', $.prv.$.config.locator[key]]);
 			});
 		},
 		callback:function($this){
@@ -614,7 +615,7 @@
 //			if($.fx.$.es_ver<6 && typeof require =='undefined'){
 
 				this.use({
-					require:'[cdn]require.js/2.3.6/require.min.js',
+					require:'cdn://require.js/2.3.6/require.min.js',
 				});
 //			}
 
@@ -767,15 +768,27 @@
 
 		return id;
 	}
-	$.pub.namespace.bundle=function(bid, ver){
+	/*
+		version bind
+
+		bid bundle-id (matching path)
+		ver version
+		suf suffix
+		dmt delimiter
+
+		bid+det+ver+suf
+
+		with delimiter:		'lib:/example.io/path-to-source'-'0.5.6/'~?/'
+		without delimiter:	'lib:/example.io/path-to-source/'0.5.6'~?/'
+
+	*/
+	$.pub.namespace.vbind=function(bid, ver, suf, dmt){
 
 		if(!$.prv.$.ns.__bundles__[bid]){
-			$.prv.$.ns.__bundles__[bid]=bid+'-'+ver;
-
+			if(!suf){suf='';} if(!dmt){dmt='';}
+			$.prv.$.ns.__bundles__[bid]=bid+dmt+ver+suf;
 		}
-
 		return $.prv.$.ns.__bundles__[bid];
-
 	}
 	//========================================================================>
 	$.prv.amd=function(){
@@ -789,7 +802,7 @@
 
 		var	data=document.querySelector('script[data-init]');
 
-		var	boot=new $.pub.namespace('[lib]webons.io/fx/'+$.prv.$.ver+'/', data);
+		var	boot=new $.pub.namespace('sys://formatrix-'+$.prv.$.ver+'/', data);
 			boot.use(data.getAttribute('data-init'));
 			boot.pub($.pub);
 

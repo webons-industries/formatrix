@@ -5,10 +5,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /*!
-*  formatrix 0.4.2 (http://formatrix.org)
+*  formatrix 0.4.3 (http://formatrix.org)
 *  >> PageConstructor 0.2.0
 *
-*  Copyright (c) webons.industries
+*  Copyright (c) 2016-2019 Germo Moeller / webons.industries
 *
 *  This source code is licensed under the MIT license found in the
 *  LICENSE file in the root directory of this source tree.
@@ -16,10 +16,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 */ ///***************************************************************************>
 (function () {
 
-	var $ = new Namespace(Namespace.bundle('[lib]webons.io/fx/PageConstructor') + '~?/library');
+	var $ = new Namespace(Namespace.vbind('lib://webons.io/fx/PageConstructor/') + 'library');
 	//************************************************************************>
 	$.use({
-		page: Namespace.bundle('[lib]webons.io/fx/PageConstructor') + '~?/'
+		page: Namespace.vbind('lib://webons.io/fx/PageConstructor/') + ''
 	});
 	//************************************************************************>
 	$.prv = {

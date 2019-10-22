@@ -2,7 +2,7 @@
 
 (function (Namespace) {
 
-	var $ = new Namespace("[app]scripts~?/examples/pubFunction");
+	var $ = new Namespace("app://scripts~?/examples/pubFunction");
 	//************************************************************************>
 	$.pub(function () {
 		console.log('pubFunction');

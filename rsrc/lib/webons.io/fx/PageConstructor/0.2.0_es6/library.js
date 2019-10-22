@@ -1,8 +1,8 @@
 /*!
-*  formatrix 0.4.2 (http://formatrix.org)
+*  formatrix 0.4.3 (http://formatrix.org)
 *  >> PageConstructor 0.2.0
 *
-*  Copyright (c) webons.industries
+*  Copyright (c) 2016-2019 Germo Moeller / webons.industries
 *
 *  This source code is licensed under the MIT license found in the
 *  LICENSE file in the root directory of this source tree.
@@ -10,10 +10,10 @@
 *////***************************************************************************>
 (()=>{
 
-  let $=new Namespace(	Namespace.bundle('[lib]webons.io/fx/PageConstructor')+'~?/library');
+  let $=new Namespace(	Namespace.vbind('lib://webons.io/fx/PageConstructor/')+'library');
 	//************************************************************************>
 	$.use({
-			page:	Namespace.bundle('[lib]webons.io/fx/PageConstructor')+'~?/',
+			page:	Namespace.vbind('lib://webons.io/fx/PageConstructor/')+'',
 	});
 	//************************************************************************>
 	$.prv=({

@@ -2,7 +2,7 @@
 
 (function () {
 
-	var $ = new Namespace("[app]scripts~?/example");
+	var $ = new Namespace("app://scripts~?/example");
 	//************************************************************************> private
 	$.prv = {
 		$: {

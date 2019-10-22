@@ -1,6 +1,6 @@
 (()=>{
 
-  let $=new Namespace('[app]scripts~?/',{
+  let $=new Namespace('app://scripts~?/',{
 
 		init:{
 			config:{
@@ -10,12 +10,12 @@
 				},
 			},
 			// init-preloads
-			use:['[lib]webons.io/fx/PageConstructor-0.2.0~?/'],
+			use:['lib://webons.io/fx/PageConstructor/0.2.0~?/'],
 		},
 	});
 	//************************************************************************> join
 	$.use({
-		page:'[lib]webons.io/fx/PageConstructor-0.2.0~?/',
+		page:'lib://webons.io/fx/PageConstructor/0.2.0~?/',
 	});
 	//************************************************************************> autorun
 	$.run(function(){

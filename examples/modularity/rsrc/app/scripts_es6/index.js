@@ -1,6 +1,6 @@
 (()=>{
 
-  let $=new Namespace("[app]scripts~?/",{
+  let $=new Namespace("app://scripts~?/",{
 
 		// init settings
 		init:{
@@ -18,15 +18,15 @@
 	$.use({
 
 		// namespace
-		example:	'[app]scripts~?/example',
+		example:	'app://scripts~?/example',
 		// function
-		HelloWorld:	'[app]scripts~?/example::HelloWorld',
+		HelloWorld:	'app://scripts~?/example::HelloWorld',
 		// function(value)
-		direct:	'[app]scripts~?/example::direct(aaa,bbb,ccc)',
+		direct:	'app://scripts~?/example::direct(aaa,bbb,ccc)',
 		// mixed levels
-		lvl1:		'[app]scripts~?/example::lvl1.lvl2.lvl3()',
-		lvl2:		'[app]scripts~?/example::lvl1.lvl2b(1).lvlA.lvlB()',
-		lvl3:		'[app]scripts~?/example::lvl1.lvl2b(2).lvlX()',
+		lvl1:		'app://scripts~?/example::lvl1.lvl2.lvl3()',
+		lvl2:		'app://scripts~?/example::lvl1.lvl2b(1).lvlA.lvlB()',
+		lvl3:		'app://scripts~?/example::lvl1.lvl2b(2).lvlX()',
 
 	});
 	//************************************************************************> autorun
@@ -37,7 +37,7 @@
 
 		//extend live: still failed!
 		/*
-		$.use({test: '[app]scripts~?/extra::test'});
+		$.use({test: 'app://scripts~?/extra::test'});
 		$.run(function(){
 			console.log('loaded XYZ');
 			console.log($.test());

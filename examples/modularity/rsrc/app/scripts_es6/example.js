@@ -1,6 +1,6 @@
 (()=>{
 
-  let $=new Namespace("[app]scripts~?/example");
+  let $=new Namespace("app://scripts~?/example");
 	//************************************************************************> private
 	$.prv={
 		$:{

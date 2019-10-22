@@ -2,11 +2,11 @@
 
 (function () {
 
-	var $ = new Namespace("[app]scripts~?/extra");
+	var $ = new Namespace("app://scripts~?/extra");
 
 	//************************************************************************> join
 	$.use({
-		app: "[app]scripts~?/"
+		app: "app://scripts~?/"
 	});
 
 	//************************************************************************> autorun

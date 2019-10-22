@@ -1,6 +1,6 @@
 ((Namespace)=>{
 
-  let $=new Namespace("[app]scripts~?/examples/pubObject");
+  let $=new Namespace("app://scripts~?/examples/pubObject");
 	//************************************************************************>
 	$.pub({
 		aFunction(){

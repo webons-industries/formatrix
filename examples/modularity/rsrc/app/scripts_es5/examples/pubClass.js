@@ -4,7 +4,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 (function (Namespace) {
 
-	var $ = new Namespace("[app]scripts~?/examples/pubClass");
+	var $ = new Namespace("app://scripts~?/examples/pubClass");
 	//************************************************************************>
 	$.pub(function () {
 		function _class() {
