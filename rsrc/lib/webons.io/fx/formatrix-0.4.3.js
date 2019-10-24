@@ -612,14 +612,11 @@
 				boot.use(cfg.init.use);
 			}
 
-//			if($.fx.$.es_ver<6 && typeof require =='undefined'){
-
-				this.use({
-					require:'cdn://require.js/2.3.6/require.min.js',
-				});
-//			}
-
-
+			// TODO: es5 import: require
+			//if($.fx.$.es_ver<6 && typeof require =='undefined'){
+			//	this.use({
+			//		require:'cdn://require.js/2.3.6/require.min.js',
+			//	});
 
 			delete cfg.init;
 
