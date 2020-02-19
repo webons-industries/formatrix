@@ -1,26 +1,5 @@
 'use strict';
 
 (function () {
-
-	var $ = new Namespace("[app]scripts~?/", {
-
-		// init settings
-		init: {
-			// override config
-			config: {
-				// locator paths
-				locator: {
-					app: './rsrc/app/',
-					lib: '../../rsrc/lib/'
-				}
-			}
-		}
-	});
-	//************************************************************************> autorun
-	$.run(function () {});
-	//************************************************************************> private
-	$.prv = {};
-	//************************************************************************> public
-	$.pub({});
-	//************************************************************************>
+  var $ = new Formatrix('[app]scripts~?/', { init: { config: { locator: { app: './rsrc/app/', lib: '../../rsrc/lib/' } } } });$.run(function () {});$.prv = {};$.pub({});
 })();

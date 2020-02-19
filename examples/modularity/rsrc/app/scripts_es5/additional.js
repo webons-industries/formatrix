@@ -2,7 +2,7 @@
 
 (function () {
 
-	var $ = new Namespace("app://scripts~?/additional");
+	var $ = new Formatrix("app://scripts~?/additional");
 	//************************************************************************> join
 	$.use({
 

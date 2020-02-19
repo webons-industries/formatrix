@@ -1,8 +1,8 @@
 /*!
-*  formatrix 0.4.3 (http://formatrix.org)
+*  formatrix 0.4.4 (http://formatrix.org)
 *
 *
-*  Copyright (c) 2016-2019 Germo Moeller / webons.industries
+*  Copyright (c) 2016-2020 Germo Moeller / webons.industries
 *
 *  This source code is licensed under the MIT license found in the
 *  LICENSE file in the root directory of this source tree.
@@ -16,7 +16,7 @@
 		prv:{
 			$:{
 				// version
-				ver:'0.4.3',
+				ver:'0.4.4',
 				// instance
 				instance:null,
 				// default boot settings > rewritable by 'init' namespace
@@ -803,7 +803,7 @@
 			boot.use(data.getAttribute('data-init'));
 			boot.pub($.pub);
 
-	root['Namespace']=$.pub.namespace;
+	root['Fx']=root['Formatrix']=$.pub.namespace;
 	root['define']=$.prv.amd; define.amd=true;
 
 })(window);

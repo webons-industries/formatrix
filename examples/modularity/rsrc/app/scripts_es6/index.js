@@ -1,6 +1,6 @@
 (()=>{
 
-  let $=new Namespace("app://scripts~?/",{
+  let $=new Formatrix("app://scripts~?/",{
 
 		// init settings
 		init:{

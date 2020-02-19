@@ -2,7 +2,7 @@
 
 (function () {
 
-	var $ = new Namespace("app://scripts~?/example");
+	var $ = new Formatrix("app://scripts~?/example");
 	//************************************************************************> private
 	$.prv = {
 		$: {

@@ -1,6 +1,6 @@
 (()=>{
 
-  let $=new Namespace("app://scripts~?/additional");
+  let $=new Formatrix("app://scripts~?/additional");
 	//************************************************************************> join
 	$.use({
 

@@ -2,7 +2,7 @@
 
 (function () {
 
-	var $ = new Namespace("app://scripts~?/", {
+	var $ = new Formatrix("app://scripts~?/", {
 
 		// init settings
 		init: {

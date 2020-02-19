@@ -1,86 +1,11 @@
 /*!
-*  formatrix 0.4.3 (http://formatrix.org)
+*  formatrix 0.4.4 (http://formatrix.org)
 *  >> PageConstructor 0.2.0
 *
-*  Copyright (c) 2016-2019 Germo Moeller / webons.industries
+*  Copyright (c) 2016-2020 Germo Moeller / webons.industries
 *
 *  This source code is licensed under the MIT license found in the
 *  LICENSE file in the root directory of this source tree.
 *
 *////***************************************************************************>
-(()=>{
-
-  let $=new Namespace(Namespace.vbind('lib://webons.io/fx/PageConstructor/','0.2.0','~?/'), {
-
-		parent:'sys://formatrix-0.4.3/',
-		called:'page',
-  	});
-	//************************************************************************>
-	$.prv=({
-		//==================================================================> register
-		$:{	instance:null,
-			//------------------------------------------------------------>
-			config:{
-				// fx-css prefix
-				prefix:'fx_',
-			},
-			// main events-obj
-			events:{},
-		},
-	});
-	if(!Array.from){
-		$.use({
-			polyfill:'lib://webons.io/fx/PageConstructor/0.2.0/polyfill',
-		});
-	}
-	//************************************************************************> join
-	$.use({
-		evt:Namespace.vbind('lib://webons.io/fx/PageConstructor/')+'events::generator',
-		lib:Namespace.vbind('lib://webons.io/fx/PageConstructor/')+'library',
-	});
-	//************************************************************************>
-	$.pub({
-		//==================================================================> instance
-		get setup(){if($.prv.$.instance){return null;}else{ return {
-			start:(config)=>{
-
-				// override config
-				$.prv.$.config=$.fx.object_merge($.prv.$.config, config);
-
-				// events
-				$.prv.$.events=new $.evt({
-					singleton:true,
-				});
-				$.prv.$.events.register('window::scroll', window, 'scroll');
-				$.prv.$.events.register('window::resize', window, 'resize');
-
-				$.fx.dom.ready(()=>{
-
-					// init library
-					$.lib.init();
-
-				});
-
-				$.fx.pointer.register($.fx.pointer.current($.$.id)['called'], $.lib.$.provided);
-
-			$.prv.$.instance=false;},
-			//------------------------------------------------------------>
-			close:()=>{
-
-				//	$.fx.dom.execute_scripts("fx/namespace");
-
-			$.prv.$.instance=true;},
-		}}},
-		//==================================================================> register
-		$:{
-			get prefix(){return $.prv.$.config.prefix;},
-			get events(){return $.prv.$.events;},
-		},
-		//==================================================================> passthroughs
-		get dom(){		return $.fx.dom;},
-		get api(){		return $.lib.api;},
-		get tools(){	return $.lib.tools;},
-		//==================================================================>
-	});
-	//************************************************************************>
-})();
+(fx=>{let $=new fx(fx.vbind('lib://webons.io/fx/PageConstructor/','0.2.0','~?/'),{parent:'sys://formatrix-0.4.4/',called:'page'});$.prv={$:{instance:null,config:{prefix:'fx_'},events:{}}};if(!Array.from){$.use({polyfill:'lib://webons.io/fx/PageConstructor/0.2.0/polyfill'})}$.use({evt:fx.vbind('lib://webons.io/fx/PageConstructor/')+'events::generator',lib:fx.vbind('lib://webons.io/fx/PageConstructor/')+'library'});$.pub({get setup(){if($.prv.$.instance){return null}else{return{start:config=>{$.prv.$.config=$.fx.object_merge($.prv.$.config,config);$.prv.$.events=new $.evt({singleton:true});$.prv.$.events.register('window::scroll',window,'scroll');$.prv.$.events.register('window::resize',window,'resize');$.fx.dom.ready(()=>{$.lib.init()});$.fx.pointer.register($.fx.pointer.current($.$.id)['called'],$.lib.$.provided);$.prv.$.instance=false},close:()=>{$.prv.$.instance=true}}}},$:{get prefix(){return $.prv.$.config.prefix},get events(){return $.prv.$.events}},get dom(){return $.fx.dom},get api(){return $.lib.api},get tools(){return $.lib.tools}})})(Formatrix);
