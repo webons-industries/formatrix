@@ -1,4 +1,13 @@
 {
 	"only":	["*.js"],
-	"presets":	["es2015"],
+	"presets": [
+		["es2015"],
+		["minify",
+			{
+				builtIns: false,
+				evaluate: false,
+				mangle: false,
+			}
+		]
+	],
 }
