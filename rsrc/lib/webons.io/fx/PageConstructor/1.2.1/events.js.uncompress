@@ -1,0 +1,196 @@
+/*!
+*  formatrix 1.0.1 (http://formatrix.org)
+*  >> PageConstructor 1.2.1
+*
+*  Copyright (c) 2016-2021 Germo Moeller / webons.industries
+*
+*  This source code is licensed under the MIT license found in the
+*  LICENSE file in the root directory of this source tree.
+*
+*////***************************************************************************>
+( fx => {
+
+  let $=new fx(fx.vbind('lib://webons.io/fx/PageConstructor/')+'events');
+	//************************************************************************>
+	$.prv=({
+		$:{
+			// last register-id assigned
+			lid:0,
+
+			// register
+			reg:{},
+		},
+		//==================================================================>
+
+		events:class {
+			constructor($rid, $eid){
+
+					let $lid=0;
+
+				this.$={
+					// register id
+					get rid(){	return $rid;},
+					// event id
+					get eid(){	return $eid;},
+
+					// last callback-id assigned
+					get lid(){$lid=$lid+1; return $lid;},
+				}
+				this.name=name;
+				this.callbacks={};
+			}
+			setCallback(callback, position){
+
+				let	$this=this,
+					cid=this.$.lid;
+
+				if(position==null){
+					this.callbacks[cid]=callback;
+				}else{/*
+					// TODO: reposition
+
+
+							let order=[];
+
+						for(let i=0;i<this.callbacks.length;i++){
+							// exponentiate the counter with 10 if position small
+							if((position >= (i*10)) && (position <= (i+1)*10)){
+								// push new callback
+
+								order["x"+cid]=callback; position=null;
+								this.pos=this.callbacks.length;
+							}
+							// push existing callbacks
+							order["x"+cid]=callback;
+							order.push(this.callbacks[i]);
+						}
+						// push new callback (if position to high)
+						if(position){order.push(callback);}
+						// set new order
+						this.callbacks=order;
+				*/}
+				return {
+					remove(){
+						delete $this.callbacks[cid];
+					}
+				}
+			}
+		},
+	});
+	//************************************************************************>
+	$.pub({
+		generator:class {
+
+			constructor($settings={}){
+
+				if($.prv.$.reg[0] && $.prv.$.reg[0].settings.singleton){return false;
+				}else{
+						let	$id=$.prv.$.lid;
+						 	    $.prv.$.lid++;
+
+						$.prv.$.reg[$id]={
+
+							events:{},
+							settings:$settings,
+						};
+
+					this.$={
+						get id(){		return $id;},
+						get settings(){	return $settings;},
+					}
+				}
+			}
+			//------------------------------------------------------------>
+			register(eid, node=null, auto=true){
+
+				if(!$.prv.$.reg[this.$.id].events[eid]){
+					$.prv.$.reg[this.$.id].events[eid]=new $.prv.events(this.$.id, eid);
+				}
+
+				let	args=Array.prototype.slice.call(arguments);
+				args= args.slice(3);
+				// auto dispatch
+				if(node && auto){
+
+					if(auto===true){auto=eid;}
+
+						let tmp=this, task;
+
+					if(!$.fx.isTypeOf(node, NodeList)){
+
+						task=function(){
+							tmp.dispatch(
+								eid,
+								node,
+								...arguments,
+								...args,
+							);
+						}
+
+						node.addEventListener(auto, task);
+
+						return {
+							remove(){
+								node.removeEventListener(auto, task)
+							}
+						}
+					}else{
+						let result=[];
+
+						for(let i=0;i<node.length;i++){
+							task=function(){
+								tmp.dispatch(
+									eid,
+									node[i],
+									...arguments,
+									...args,
+								);
+							}
+							node[i].addEventListener(auto, task);
+							result.push({
+								remove(){
+									node[i].removeEventListener(auto, task)
+								}
+							});
+						}
+						return result;
+					}
+				}
+			}
+			dispatch(eid, tArg){
+				if($.prv.$.reg[this.$.id].events[eid]){
+
+					let	$rid=this.$.id,
+						args=Array.prototype.slice.call(arguments);
+					args= args.slice(2);
+
+					//if(eid=='window::resize'){console.log('--------------------');}
+
+					Object.keys($.prv.$.reg[this.$.id].events[eid].callbacks).forEach(function(key) {
+						$.prv.$.reg[$rid].events[eid].callbacks[key].call(tArg ? tArg : window, ...args);
+					});
+
+					return true;
+				}else{return false;}
+			}
+			remove(eid){
+				delete $.prv.$.reg[this.$.id].events[eid];
+			}
+			//------------------------------------------------------------>
+			addCallback(eid, cb, position=null){
+
+				if($.prv.$.reg[this.$.id].events[eid] && cb){
+					return $.prv.$.reg[this.$.id].events[eid].setCallback(cb, position, ...arguments);
+				}else{return false;}
+			}
+			/*getCallback(eid){
+				if($.prv.$.reg[this.$.id].events[eid]){
+					return $.prv.$.reg[this.$.id].events[eid].getCallbacks();
+				}else{return null;}
+			}
+			delCallback(eid, callback_name){}
+			*/
+		},
+	});
+	//************************************************************************>
+})(Formatrix);

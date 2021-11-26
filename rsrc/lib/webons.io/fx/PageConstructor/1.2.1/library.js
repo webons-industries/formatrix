@@ -1,0 +1,672 @@
+/*!
+*  formatrix 1.0.1 (http://formatrix.org)
+*  >> PageConstructor 1.2.1
+*
+*  Copyright (c) 2016-2021 Germo Moeller / webons.industries
+*
+*  This source code is licensed under the MIT license found in the
+*  LICENSE file in the root directory of this source tree.
+*
+*////***************************************************************************>
+(config => {
+
+  let $=new Fx(config);
+	//************************************************************************>
+
+	$.use({
+		page:'./index'
+	});
+	//************************************************************************>
+	$.run(function(){
+		console.log('%c[PageConstructor/library]','color:#aa5;');
+
+
+
+	});
+
+	//************************************************************************>
+	$.prv=({
+		$:{	instance:null,
+			//------------------------------------------------------------>
+			config:{
+
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - -> api
+				api:{
+					ui:{
+					},
+					layer:{
+
+						// full-screen-mode (hide body scrollbar + keep scroll-position)
+						fsMode:true,
+						// z-index start
+						zIndex:10000,
+						// root layer (window) sticky active area
+						get rootStickieSpaceHeight(){return document.body.offsetHeight-document.getElementById('header').offsetHeight;},
+					},
+				},
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - ->
+				element:{
+					header:{
+						selector:	'#header',
+						shrinkOn:	true,
+					},
+					select:{
+						selector:	'ul.select',
+					},
+				},
+			},
+			//------------------------------------------------------------>
+			tools:{
+				// element-id
+				eid:1,
+			},
+			//------------------------------------------------------------>
+			api:{
+				ui:{
+					collapse:[],
+				},
+				layer:{
+					fsModeStatus:false,
+
+					pos:['root'],
+					obj:{},
+				}
+			},
+			cookies:{},
+		},
+		//==================================================================>
+		provided:{
+
+			// layer
+			get layer(){return $.prv.$.api.layer.obj;},
+
+			ui:{
+				// collapse // TODO: nested
+				collapse($this){
+					let	wrap=$this.classList.contains('fx_collapse') ? $this : $this.closest('fx_collapse'),
+						data=wrap.querySelector('fx_collapse-data'),
+						ctrl=wrap.querySelector('fx_collapse-ctrl');
+
+					wrap.id=$.tools.eid(wrap.id);
+					wrap.classList.toggle('fx_active');
+					ctrl ? ctrl.classList.toggle('fx_opened') : null;
+
+					if(wrap.classList.contains('fx_active')){
+						console.log(wrap.id+": open");
+						data.style.maxHeight=data.scrollHeight+'px';
+						// TODO: remove events if status:false
+
+						$.prv.$.api.ui.collapse[wrap.id]={
+							evt:$.page.$.events.addCallback('window::resize', function(){data.style.maxHeight=data.scrollHeight+'px';}),
+						};
+
+					}else{data.style.maxHeight=0;
+						$.prv.$.api.ui.collapse[wrap.id].evt.remove();
+
+						// TODO: scroll in views
+
+						let	scrollbar=$.tools.getScrollParent(wrap);
+						scrollbar.scrollTop	= scrollbar.scrollTop
+										+ parseInt(wrap.getBoundingClientRect().top)
+										- $.tools.nodes($.prv.$.config.element.header.selector)[0].clientHeight
+										- parseInt(window.getComputedStyle(wrap).getPropertyValue('margin-top'));
+
+						console.log(wrap.id+": close");
+					}
+				},
+			},
+		},
+		//==================================================================>
+		src:{
+			api:{
+				root:{
+					_eventUpdate(){						//console.log("> root.event:update");
+
+						$.page.$.events.dispatch('window::scroll');
+						$.page.$.events.dispatch('fx.layer::update', $.api.layer.current.$.ele,  $.api.layer.current);
+
+						// give a bit time and run
+						window.setTimeout(function(){
+							$.page.$.events.dispatch('window::scroll');
+							$.page.$.events.dispatch('fx.layer::update', $.api.layer.current.$.ele,  $.api.layer.current);
+						}, 600);
+					},
+					_eventScroll(){						//console.log("> root.event:scroll");
+						if((window.pageYOffset || document.documentElement.scrollTop || 0) >
+						   ($.prv.$.config.element.header.shrinkOn ? $.prv.$.config.element.header.shrinkOn : $.prv.$.config.element.header.clientHeight)){
+							if($.prv.$.config.element.header.hide){		document.body.classList.remove('fx_header-hide');}
+							if($.prv.$.config.element.header.shrinkOn){	document.body.classList.add('fx_header-shrink');}
+						}else{if($.prv.$.config.element.header.hide){		document.body.classList.add('fx_header-hide');}
+							if($.prv.$.config.element.header.shrinkOn){	document.body.classList.remove('fx_header-shrink');}
+						}
+					},
+				},
+				layer:{
+					_eventUpdate(layer){					//console.log("> layer.event:update");
+
+						// register current layer scrollbar
+						$.page.$.events.register('fx.layer::scroll', $.api.layer.current.$.scrollbar, 'scroll' , $.api.layer.current);
+
+						// stickies
+						let	stickies_ps = this.querySelectorAll('[data-fx-layer='+layer.$.uid+']');
+							layer.$.stickies=[];
+
+						for(var i = 0; i < stickies_ps.length; i++) {
+							if(stickies_ps[i].offsetHeight < (layer.$.settings.stickies_space ? layer.$.settings.stickies_space : document.body.offsetHeight)){
+								layer.$.stickies.push(stickies_ps[i]);
+							}else{stickies_ps[i].style.top=0;
+								stickies_ps[i].classList.remove('fx_sticky-space');
+							}
+
+							// sidebar container > content container
+							if(	(stickies_ps[i].parentNode.clientWidth != stickies_ps[i].parentNode.parentNode.clientWidth)&&
+								(stickies_ps[i].parentNode.offsetHeight <= stickies_ps[i].parentNode.parentNode.offsetHeight)
+							){	stickies_ps[i].classList.add('fx_sticky-active');
+								stickies_ps[i].parentNode.classList.add('fx_sticky-active');
+							}else{stickies_ps[i].classList.remove('fx_sticky-active');
+								stickies_ps[i].parentNode.classList.remove('fx_sticky-active');
+							}
+						}
+						// dispatch current layer scrollbar
+						window.setTimeout(function(){
+							$.page.$.events.dispatch('fx.layer::scroll', $.api.layer.current.$.scrollbar, 'scroll' , $.api.layer.current);
+						}, 600);
+
+					},
+					_eventScroll(evt, layer){				//console.log("> layer.event:scroll");
+
+							layer.$.scroll.cPos = layer.$.scrollbar.scrollTop || layer.$.scroll.lPos || 0;
+
+					 /* SLOT */	layer.$.slots.onScroll ? layer.$.slots.onScroll.call(layer) : null
+
+						if(layer.$.scroll.timer!==null){
+							layer.$.ele.classList.add("fx_scroll");
+							if(layer.$.scroll.lPos > layer.$.scroll.cPos){
+								layer.$.ele.classList.add("fx_scroll-up");
+								layer.$.ele.classList.remove("fx_scroll-down");
+								layer.$.scroll.dir=false;
+							}else if(layer.$.scroll.lPos < layer.$.scroll.cPos){
+								layer.$.ele.classList.add("fx_scroll-down");
+								layer.$.ele.classList.remove("fx_scroll-up");
+								layer.$.scroll.dir=true;
+							}
+							layer.$.scroll.lPos=layer.$.scroll.cPos;
+							clearTimeout(layer.$.scroll.timer);
+						}
+
+						for (var i = 0; i < layer.$.stickies.length; i++) {
+
+								let sticky=layer.$.stickies[i];
+
+							if(window.getComputedStyle(layer.$.stickies[i], '').getPropertyValue('position')!='static'){
+								let sticky_func=function(){
+									let	parent_rect = sticky.parentNode.getBoundingClientRect(),
+										top, max;
+
+									if(parent_rect.top > 0){
+										top=0;	sticky.classList.remove('fx_sticky-space');
+									}else{		sticky.classList.add('fx_sticky-space');
+										top=layer.$.scroll.cPos-(layer.$.scroll.cPos+parent_rect.top);
+										max=sticky.parentNode.offsetHeight-sticky.offsetHeight;
+										// TODO:: check max
+										if(top > max){top=max;}
+									}
+									sticky.style.top=top+'px';
+								}
+								// TODO:: max ?
+								window.setTimeout(sticky_func, 300);
+								window.setTimeout(sticky_func, 600);
+							}
+						}
+
+						layer.$.scroll.timer=window.setTimeout(function(){
+							layer.$.ele.classList.remove('fx_scroll');
+						}, 150);
+					},
+					toggleFullscreen(cb, fsMode){
+
+							let	win=$.prv.$.api.layer.obj.root.$;
+
+						// store scroll position
+						if($.prv.$.api.layer.fsModeStatus){win.scroll.lPos=window.pageYOffset;}
+						// disable binded css-transions
+						win.ele.classList.remove("fx_dom-is-loaded");
+						// toggle fullscreen
+
+						win.ele.classList.toggle(fsMode ? ("fx_screen-" + (fsMode===true ? 'full': fsMode)): null);
+
+						// callback!
+						cb.call(this);
+
+						// scroll position
+						if($.prv.$.api.layer.fsModeStatus){
+							win.ele.style.top="-"+win.scroll.lPos+"px";
+						}else{win.ele.style.top="auto";
+							win.ele.scrollTop=win.scroll.lPos;
+						}
+
+						setTimeout(
+							$.cmd.dom.ready(()=>{
+								win.ele.classList.add("fx_dom-is-loaded");
+							}),
+						150);
+					},
+				},
+			},
+		},
+		//==================================================================>
+		select_update(ele){
+
+
+				let	trigger, event,
+					sync=document.querySelector(this.dataset.sync);
+
+			if(ele){	event=ele;
+					event.stopPropagation();
+					ele=ele.target;
+
+					while(!ele.hasAttribute("value")){
+						 ele=ele.parentElement || ele.parentNode;
+					}
+					trigger=!this.classList.toggle('active');
+
+			}else{	if(sync){ele=this.querySelector('li[value="'+sync.value+'"]');}
+					if(!ele){ele=this.querySelector('li[value="'+this.value+'"]');}
+					if(!ele){ele=this.querySelector('li');}
+					trigger=true; event=null;
+			}
+
+			if(trigger){
+
+				if(ele.value!=this.value){
+					this.querySelectorAll('.selected').forEach((yet)=>{
+						yet.classList.remove('selected');
+					});
+				}
+				ele.classList.add('selected');
+				this.value=ele.value;
+				sync ? sync.value=ele.value : null;
+
+				if(event && this.dataset.onchange){
+					((callback, event)=>{
+						eval(callback);
+					})(this.dataset.onchange, event);
+				}
+			}
+
+			let $this=this;
+
+			window.addEventListener('click', ()=>{
+				$this.classList.remove('active');
+				this.removeEventListener('click', this);
+			}, false);
+		}
+	});
+	//************************************************************************>
+	$.pub({
+		//==================================================================>
+		$:{
+			get provided(){return $.prv.provided;},
+		},
+		//==================================================================>
+		init(events){
+
+			$.page.$.events=events;
+
+			let $root=$.page.api.layer.register(document.documentElement,
+				{
+					uid:		'root',
+					singleton:	true,
+
+					get stickies_space(){return $.prv.$.config.api.layer.rootStickieSpaceHeight;},
+
+					slots:{
+						init(){
+							this.open();
+						}
+					}
+				}
+			);
+
+			$.cmd.dom.ready(()=>{
+				document.documentElement.classList.add('fx_dom-is-loaded');
+
+				if($.prv.$.config.element.select){$.setup.select();}
+
+			});
+
+			$.page.$.events.register(	'fx.layer::update');
+			$.page.$.events.register(	'fx.layer::scroll',	window, 'scroll', $.prv.$.api.layer.obj.root);
+			$.page.$.events.addCallback(	'fx.layer::update',	$.prv.src.api.layer._eventUpdate);
+			$.page.$.events.addCallback(	'fx.layer::scroll',	$.prv.src.api.layer._eventScroll);
+
+												$.prv.src.api.root._eventUpdate();
+			$.page.$.events.addCallback(	'window::resize',		$.prv.src.api.root._eventUpdate);
+			$.page.$.events.addCallback(	'window::scroll',		$.prv.src.api.root._eventScroll);
+		},
+		//==================================================================>
+		setup:{
+			// TODO: multiselect val.split(',') ?
+			select(){
+
+				let	slc=$.prv.$.config.element.select;
+
+				document.querySelectorAll(slc.selector).forEach((match)=>{
+					$.page.$.events.register('fx.element:'+slc.selector, match, 'click');
+					$.prv.select_update.call(match, null);
+				});
+				$.page.$.events.addCallback('fx.element:'+slc.selector, $.prv.select_update);
+			},
+		},
+		//==================================================================>
+		tools:{
+			eid(id){
+				return id ? id : 'fx_id_'+$.prv.$.tools.eid++
+			},
+			loadCSS(uri){
+
+				let link = document.createElement( "link" );
+				link.href = fx.cmd.resolve(uri)
+				link.type = "text/css";
+				link.rel = "stylesheet";
+				link.media = "screen,print";
+
+				document.getElementsByTagName("head")[0].appendChild(link);
+			},
+			isNumber(n) {
+				return !isNaN(parseFloat(n)) && isFinite(n);
+			},
+			getScrollParent(node){
+				const isElement = node instanceof HTMLElement;
+			      const overflowY = isElement && window.getComputedStyle(node).overflowY;
+			      const isScrollable = overflowY !== 'visible' && overflowY !== 'hidden';
+
+			      if (!node) {
+			        return null;
+			      } else if (isScrollable && node.scrollHeight >= node.clientHeight) {
+			        return node;
+			      }
+
+			      return this.getScrollParent(node.parentNode) || document.body;
+			},
+			elementInViewport(el){
+
+				let	t = el.offsetTop,
+					l = el.offsetLeft,
+					h = el.offsetHeight,
+					w = el.offsetWidth;
+
+				while(el.offsetParent){
+					el = el.offsetParent;
+					t += el.offsetTop;
+					l += el.offsetLeft;
+				}
+				return (
+					t >= window.pageYOffset && l >= window.pageXOffset &&
+					(t + h) <= (window.pageYOffset + window.innerHeight) &&
+					(l + w) <= (window.pageXOffset + window.innerWidth)
+				);
+			},
+			nodes:(q)=>{
+
+					let nodes=[];
+
+				switch($.cmd.isTypeOf(q, null, true)){
+					// #id / queries
+					case 'String':{
+						if(/^\#[a-zA-Z0-9]*$/.test(q)){
+							nodes[0] = document.getElementById(q.substr(1));
+						}else{nodes    = document.querySelectorAll(q);} // TODO: s.split(",") ?
+					break;}
+					case 'Array':{
+						nodes=q;
+					break;}
+					// dom objects
+					case 'DomObject':{
+						if(!q.length){nodes[0]=q;}else{nodes=q;}
+					break;}
+					case 'Window':{
+						nodes[0]=q;
+					break;}
+				}
+				return nodes;
+			},
+		},
+		//==================================================================>
+		api:{
+			extend($records, $pointer=''){
+				if($pointer){$pointer='.'+$pointer}
+				$pointer=$pointer.match(/^ext\.|\.ext\./) ? $pointer : $pointer+".ext"
+				$.cmd.pointer.register($.cmd.pointer.current($.$.id)['called']+$pointer, $records);
+			},
+			ui:{
+				collapse:{
+
+				},
+				select:{
+					add(ele){
+
+						$.prv.select_update.call(ele, null);
+						return $.page.$.events.register('fx.element:'+$.prv.$.config.element.select.selector, ele, 'click');
+					},
+				},
+			},
+			layer:{
+				blueprint: class {
+					// - - - - - - - - - - - - - - - - - - - - -> [layer] constructor
+					constructor($id, $settings={}){
+
+							let	ele=document.getElementById($id),
+								$this=this;
+
+							$settings.fsMode=$settings.fsMode==undefined ? $.prv.$.config.api.layer.fsMode : $settings.fsMode;
+
+						this.$={
+
+							get uid(){		return $id;},
+							get ele(){		return ele; /*document.getElementById($id);*/},
+							get pos(){		return $.prv.$.api.layer.pos.indexOf($id);},
+							get pos_len(){	return $.prv.$.api.layer.pos.length;},
+							get settings(){
+
+								return $settings;
+							},
+							get scrollbar(){
+								return $settings.scrollbar ? ele.querySelector("#"+$id +" "+$settings.scrollbar) : ele;
+							},
+							reg:{},
+							status:null,
+							slots:$settings.slots ? $settings.slots : {},
+							scroll:{
+								// current position
+								cPos:null,
+								// last position
+								lPos:null,
+								// scroll-direction: true:down/false:up
+								dir:null,
+								// scroll timer
+								timer:null,
+							},
+							stickies:[],
+						};
+						this.updateLayer=()=>{
+							return $.page.$.events.dispatch('fx.layer::update', $this.$.ele, $this);
+						}
+					}
+					// - - - - - - - - - - - - - - - - - - - - -> [layer] open / focus
+					open($cb={}){let result=null;
+
+						/* ! */ this.$.status=true;
+
+						// open
+						if(this.$.pos < 0){	//console.log('open: '+this.$.uid);
+
+						/* SLOT */	this.$.slots.openBefore ? this.$.slots.openBefore.call(this) : null
+
+								let tmp=()=>{
+									$.prv.$.api.layer.pos.push(this.$.uid);
+										$.cmd.isTypeOf($cb, Function) ? $cb() : $.cmd.object.merge();
+
+
+									this.$.ele.classList.add('fx_layer-visible');
+									this.$.ele.classList.remove('fx_layer-hidden');
+									this.$.ele.style.zIndex=$.prv.$.config.api.layer.zIndex+this.$.pos_len+1;
+
+						/* SLOT */		this.$.slots.openAfter ? this.$.slots.openAfter.call(this) : null
+								}
+
+								if(this.$.settings.fsMode && !$.prv.$.api.layer.fsModeStatus){
+									// all layer below may not be controlled (closed)!
+									// TODO: check: fsModeStatus if fsMode is string
+									$.prv.$.api.layer.fsModeStatus=this.$.pos_len+1;
+									result=$.prv.src.api.layer.toggleFullscreen(tmp, this.$.settings.fsMode);
+								}else{result=tmp();}
+
+							// focus
+							}else{			//console.log('focus: '+this.$.uid);
+
+						/* SLOT */	this.$.slots.focusBefore ? this.$.slots.focusBefore.call(this) : null
+
+									let i=this.$.pos;
+
+								$.prv.$.api.layer.pos.splice(this.$.pos, 1);
+								$.prv.$.api.layer.pos.push(this.$.uid);
+
+								for(i; i<$.prv.$.api.layer.pos.length; i++){
+									$.prv.$.api.layer.obj[$.prv.$.api.layer.pos[i]].$.ele.style.zIndex =$.prv.$.config.api.layer.zIndex+i+1;
+								}
+
+						/* SLOT */ 	this.$.slots.focusAfter ? this.$.slots.focusAfter.call(this) : null
+							}
+
+							// set this.active and remove last.active
+							window.setTimeout(()=>{
+
+								this.$.ele.classList.add('fx_layer-active');
+								// check if is root
+								if($.prv.$.api.layer.pos.length>1){$.prv.$.api.layer.obj[$.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-2]].$.ele.classList.remove('fx_layer-active');}
+
+							}, this.$.settings.timeout_open || 0);
+
+							$.page.$.events.dispatch('fx.layer::update', this.$.ele, this);
+
+							return result;
+						}
+					// - - - - - - - - - - - - - - - - - - - - -> [layer] close
+					close($cb={}){let result=null;
+						//console.log('close: '+this.$.uid);
+
+						/* SLOT */ this.$.slots.closeBefore ? this.$.slots.closeBefore.call(this) : null
+
+							// TODO: check: let last=$.prv.$.api.layer.obj[$.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-1]];
+							let last=$.prv.$.api.layer.obj[$.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-2]];
+
+							let tmp=()=>{
+
+								this.$.pos > 0 ? $.prv.$.api.layer.pos.splice(this.$.pos, 1) :null;
+
+									$.cmd.isTypeOf($cb, Function) ? $cb() : null;
+
+								//last=$.prv.$.api.layer.obj[$.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-1]];
+								this.$.ele.classList.remove('fx_layer-active');
+								this.$.ele.classList.remove('fx_layer-visible');
+
+								window.setTimeout(()=>{
+						/* ! */		this.$.status=null;
+									this.$.ele.classList.add('fx_layer-hidden');
+
+								}, this.$.settings.timeout_close || 0);
+
+								if(this.$.ele.id!=last.$.ele.id){last.$.ele.classList.add('fx_layer-active');}
+						/* SLOT */	this.$.slots.closeAfter ? this.$.slots.closeAfter.call(this) : null
+
+							}
+							// fullscreen-mode
+							if($.prv.$.api.layer.fsModeStatus && this.$.pos_len > 1 && this.$.pos_len==$.prv.$.api.layer.fsModeStatus){
+								$.prv.$.api.layer.fsModeStatus=false;
+								result=$.prv.src.api.layer.toggleFullscreen(tmp, this.$.settings.fsMode);
+							}else{result=tmp();}
+
+							$.page.$.events.dispatch('fx.layer::update', last.$.ele, last);
+
+							return result;
+						}
+					// - - - - - - - - - - - - - - - - - - - - -> [layer] toggle
+					toggle($cb=null){
+						if(this.$.pos < 0){this.open($cb);
+						}else{if(this.$.uid == $.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-1]){
+							this.close($cb);
+						}else{this.open($cb);}}
+					}
+					// - - - - - - - - - - - - - - - - - - - - ->
+				},
+				register($nodes, $settings={}, $class=null){
+
+						$nodes=$.tools.nodes($nodes);
+
+						$class=$class ? $class : $.api.layer.blueprint;
+
+						let	layer=[], obj,
+							ini, res;
+
+
+					for(let i = 0; i < $nodes.length; i++){
+
+						if(!$nodes[i].id){
+							$nodes[i].id=($settings.uid && $nodes.length==1) ? $settings.uid : $.tools.eid();
+						}
+
+						obj=$.prv.$.api.layer.obj[$nodes[i].id]=new $class($nodes[i].id, $settings);
+						obj.$.reg.init=($settings.slots && $settings.slots.init) ? $settings.slots.init.call(obj) : null;
+						if($settings.singleton || $nodes.length==1){layer=obj;}else{layer.push(obj);}
+					}
+					return layer;
+				},
+				getById($id){		return $.prv.$.api.layer.obj[$id];},
+				get current(){		return $.prv.$.api.layer.obj[$.prv.$.api.layer.pos[$.prv.$.api.layer.pos.length-1]];},
+				getScrollDir($id){	return $id ? this.getById($id).$.scroll.dir : this.current.$.scroll.dir;}
+			},
+		},
+		//==================================================================>
+		cookies:{
+			get all(){
+				return document.cookie.split(/; */).reduce(
+					(obj, str) => {
+
+							let  [key, val]=str.trim().split('=').map(decodeURIComponent);
+
+						try {		obj[key]=JSON.parse(val);
+						}catch(e){	obj[key]=val;}
+
+						return obj;
+					}, {}
+				);
+			},
+			get(key){
+				return this.all[key];
+			},
+			set(key, val, expires=null, path='/', domain=null, secure=null){
+			      document.cookie = key + "=" + ($.cmd.isTypeOf(val, Object) ? JSON.stringify(val) : val) +
+			      ((expires)	? "; expires=" + ($.cmd.isTypeOf(expires, Date) ? expires.toUTCString() : expires) : "") +
+			      ((path)	? "; path="    + path   : "") +
+			      ((domain)	? "; domain="  + domain : "") +
+			      ((secure)	? "; secure" : "");
+			},
+			del(key, path='/', domain=window.location.hostname){
+				if(key!='*'){
+					document.cookie=key+'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+path;
+				}else{
+						var	p=domain.split('.');
+
+					while(p.length>1){
+						Object.keys(this.all).map(function(key){
+							document.cookie = key+'=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; domain='+p.join('.')+';';
+						});
+						p.shift();
+					}
+				}
+			}
+		},
+	});
+
+})(Fx.config || null);
